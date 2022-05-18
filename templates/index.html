@@ -13,7 +13,6 @@
     <div class="header__wrapper">
       <a href="/" class="header__logo-link">
         <svg class="header__logo" width="177" height="26">
-<!--          <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#skyprogram"></use>-->
             <h1>KOTOGRAMM</h1>
         </svg>
       </a>
@@ -53,9 +52,20 @@
         </div>
       </div>
       {% endfor %}
-
-
     </section>
+    <h2>Поиск постов</h2>
+
+    <form action="/search" method="get">
+        <p>По вхождению слова</p>
+        <input type="text" name="s">
+        <input type="submit" value="Найти" class="button">
+        <br>
+        <br>
+        <hr>
+    </form>
+    <br>
+    <br>
+    <br>
   </main>
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
     <symbol id="skyprogram" viewbox="0 0 177 26" fill="none" width="177" height="26">
