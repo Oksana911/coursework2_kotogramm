@@ -3,7 +3,7 @@ from json import JSONDecodeError
 
 
 def get_all(path):
-    """возвращает все посты/комментарии"""
+    """возвращает все посты/комментарии списком словарей"""
     try:
         with open(path, 'r', encoding='utf-8') as f:
             data = json.load(f)

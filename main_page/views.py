@@ -14,8 +14,8 @@ main_blueprint = Blueprint("main_blueprint", __name__, template_folder="template
 def main_page():
     """Главная страница показывает все посты"""
     # logging.info("Открытие главной страницы")
-    main_page_content = utils.get_all(POST_PATH)
-    return render_template("index.html", main_page_content=main_page_content)
+    all_posts = utils.get_all(POST_PATH)
+    return render_template("index.html", all_posts=all_posts)
 
 
 @main_blueprint.route("/post/<int:post_id>")
@@ -23,7 +23,12 @@ def search_by_post_id_page(post_id):
     """Страница одного поста по его номеру"""
     # logging.info("Открытие страницы поста по его номеру")
     post = utils.get_post_by_pk(post_id, POST_PATH)
-    return render_template("post.html", post=post)
+    post_id = post["pk"]
+    comments = utils.get_comments_by_post_id(post_id, COMMENTS_PATH)
+    comments_count = len(comments)
+
+
+    return render_template("post.html", post=post, comments=comments, comments_count=comments_count)
 
 
 # @main_blueprint.route("/search/<s>", methods=["POST"])
