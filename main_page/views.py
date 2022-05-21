@@ -2,8 +2,6 @@ import logging
 
 from flask import Blueprint, render_template, request
 
-import utils
-
 from config import *
 
 main_blueprint = Blueprint("main_blueprint", __name__, template_folder="templates")
@@ -27,26 +25,23 @@ def search_by_post_id_page(post_id):
     comments = utils.get_comments_by_post_id(post_id, COMMENTS_PATH)
     comments_count = len(comments)
 
-
     return render_template("post.html", post=post, comments=comments, comments_count=comments_count)
 
 
-# @main_blueprint.route("/search/<s>", methods=["POST"])
-# def search_by_substring_page(s):
-#     """Страница поиска постов по слову"""
-#     s = request.args.get("s", "")
-#     # logging.info("Открытие страницы поиска")
-#     # posts = utils.get_all("data/data.json")
-#     result = utils.search_for_posts(s, "data/data.json")
-#
-#     return render_template("post.html", posts=result, s=s)
-#
-# @main_blueprint.route("/search/<username>")
-# def search_by_username_page():
-#     """Страница поиска постов по юзеру"""
-#     # s = request.args.get("s", "")
-#     # # logging.info("Открытие страницы поиска")
-#     # # posts = utils.get_all("data/data.json")
-#     # result = utils.search_for_posts(s, "data/data.json")
-#     #
-#     # return render_template("post.html", posts=result, s=s)
+@main_blueprint.route("/search")
+def search_by_substring_page():
+    """Страница поиска постов по слову"""
+    # logging.info("Открытие страницы поиска по слову")
+    s = request.args.get("s", "")
+    posts = utils.search_for_posts(s, POST_PATH)
+    posts_count = len(posts)
+    return render_template("search.html", posts=posts, s=s, posts_count=posts_count)
+
+@main_blueprint.route("/search/<username>", methods=["GET", "POST"])
+def search_by_username_page(username):
+    """Страница поиска постов по юзеру"""
+    # logging.info("Открытие страницы поиска постов по юзеру")
+    user_name = request.args.get("item__username")
+    posts = utils.get_posts_by_user(user_name, POST_PATH)
+    return render_template("user-feed.html", posts=posts, user_name=user_name)
+

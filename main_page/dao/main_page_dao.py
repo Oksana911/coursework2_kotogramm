@@ -1,0 +1,77 @@
+import json
+from json import JSONDecodeError
+
+
+class MainPageDao:
+    """Работа со всеми постами"""
+
+    def __init__(self, path):
+        self.path = path
+
+    def get_all(self):
+        """возвращает все посты/комментарии списком словарей"""
+        with open(self.path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        return data
+    # try:
+    #     with open(path, 'r', encoding='utf-8') as f:
+    #         data = json.load(f)
+    #     return data
+    # except FileNotFoundError:
+    #     print("Файл не найден")
+    # except JSONDecodeError:
+    #     print("Файл не удается преобразовать")
+
+
+    def get_posts_by_user(self, user_name):
+        """возвращает посты определенного пользователя"""
+        if type(user_name) != str:
+            raise TypeError
+
+        data = self.get_all()
+        posts_by_user = []
+
+        for post in data:
+            if post["poster_name"].lower() == user_name.lower():
+                posts_by_user.append(post)
+        return posts_by_user
+
+
+    def get_comments_by_post_id(self, post_id):
+        """возвращает комментарии определенного поста"""
+        if type(post_id) != int:
+            raise TypeError
+
+        data = self.get_all()
+        comments = []
+
+        for comment in data:
+            if comment["post_id"] == post_id:
+                comments.append(comment)
+        return comments
+
+
+    def search_for_posts(self, query):
+        """возвращает список постов по ключевому слову"""
+        if type(query) != str:
+            raise TypeError
+
+        data = self.get_all()
+        posts_by_query = []
+
+        for post in data:
+            if query.lower() in post["content"].lower():
+                posts_by_query.append(post)
+        return posts_by_query
+
+
+    def get_post_by_pk(self, pk):
+        """возвращает один пост по его номеру"""
+        if type(pk) != int:
+            raise TypeError
+
+        data = self.get_all()
+
+        for post in data:
+            if post["pk"] == pk:
+                return post
