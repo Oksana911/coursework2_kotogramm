@@ -6,7 +6,7 @@ api_blueprint = Blueprint("api_blueprint", __name__, template_folder="templates"
 
 from main_page.dao.main_page_dao import MainPageDao
 from main_page.dao.comments_dao import CommentsDao
-from config import *
+from config import POST_PATH, COMMENTS_PATH
 
 main_page_dao = MainPageDao(POST_PATH)
 comments_dao = CommentsDao(COMMENTS_PATH)

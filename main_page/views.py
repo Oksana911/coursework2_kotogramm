@@ -4,7 +4,7 @@ from json import JSONDecodeError
 
 from flask import Blueprint, render_template, request, abort
 
-from config import *
+from config import POST_PATH, COMMENTS_PATH
 
 from .dao.main_page_dao import MainPageDao
 from .dao.comments_dao import CommentsDao
@@ -43,8 +43,19 @@ def search_by_post_id_page(post_id):
     else:
         if post is None:
             abort(404)
+
+        content_with_tags = ""
+        content = post["content"].split(" ")
+        for word in content:
+            if word.startswith("#"):
+                word = word[1:]
+                content_with_tags += f'<a href="/tag/{word}">#{word}</a>'
+            else:
+                content_with_tags += word
+            content_with_tags += " "
+
         comments_count = len(comments)
-        return render_template("post.html", post=post, comments=comments, comments_count=comments_count)
+        return render_template("post.html", post=post, comments=comments, comments_count=comments_count, content_with_tags=content_with_tags)
 
 
 @main_blueprint.errorhandler(404)
